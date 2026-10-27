@@ -205,9 +205,9 @@ function calculateRelevanceScore(product, query) {
 }
 
 /**
- * Multi-tier HTML fetcher
+ * Multi-tier HTML fetcher (8s default timeout to prevent blocking)
  */
-async function fetchHtml(url, timeoutMs = 25000) {
+async function fetchHtml(url, timeoutMs = 8000) {
   if (SCRAPER_API_KEY && !scraperApiDisabled) {
     try {
       const resp = await fetch(scraperUrl(url), { signal: AbortSignal.timeout(timeoutMs) });
@@ -348,40 +348,87 @@ async function scrapeMyntra(query) {
   const results = [];
   try {
     const url = `https://www.myntra.com/${encodeURIComponent(query)}?rawQuery=${encodeURIComponent(query)}`;
-    const html = await fetchHtml(url);
+    const html = await fetchHtml(url, 8000);
     const $ = cheerio.load(html);
 
-    $('li.product-base').slice(0, 12).each((_, el) => {
+    // 1. Modern Myntra hydrates via window.__myx JSON script
+    $('script').each((_, el) => {
+      if (results.length >= 8) return false;
+      const text = $(el).text();
+      if (!text.includes('window.__myx')) return;
+
+      const marker = 'window.__myx = ';
+      const start = text.indexOf(marker);
+      if (start === -1) return;
+
+      let jsonStr = text.slice(start + marker.length).trim();
+      if (jsonStr.endsWith(';')) jsonStr = jsonStr.slice(0, -1);
+
       try {
-        if (results.length >= 8) return false;
-        const item = $(el);
-        const brand = item.find('h3.product-brand').first().text().trim();
-        const desc = item.find('h4.product-product').first().text().trim();
-        const name = `${brand} ${desc}`.trim();
-        if (!name || !isRelevant(name, query)) return;
+        const data = JSON.parse(jsonStr);
+        const products = data?.searchData?.results?.products || [];
+        for (const p of products) {
+          if (results.length >= 8) break;
+          const brand = p.brand || '';
+          const prodName = p.productName || p.additionalInfo || '';
+          const name = `${brand} ${prodName}`.trim() || p.product || null;
+          const price = cleanPrice(p.price);
+          const mrp = cleanPrice(p.mrp);
 
-        let priceEl = item.find('span.product-discountedPrice').first();
-        if (!priceEl.length) priceEl = item.find('div.product-price span').first();
-        const mrpEl = item.find('span.product-strike').first();
-        const linkEl = item.find('a[href]').first();
-        let imgEl = item.find('img.img-responsive').first();
-        if (!imgEl.length) imgEl = item.find('picture img').first();
-
-        const price = cleanPrice(priceEl.text());
-        const mrp = cleanPrice(mrpEl.text());
-        const href = linkEl.attr('href') || '';
-        const urlP = href.startsWith('http') ? href : `https://www.myntra.com/${href}`;
-        const img = imgEl.attr('src') || null;
-
-        if (price && price > 0) {
-          results.push({
-            platform: 'Myntra', name, price, mrp,
-            discount: mrp && mrp > price ? Math.round((1 - price / mrp) * 100) : null,
-            rating: null, url: urlP, img,
-          });
+          if (name && price && price > 0 && isRelevant(name, query)) {
+            const landing = p.landingPageUrl || '';
+            const fullUrl = landing.startsWith('http') ? landing : `https://www.myntra.com/${landing}`;
+            const img = p.searchImage || null;
+            results.push({
+              platform: 'Myntra',
+              name,
+              price,
+              mrp,
+              discount: mrp && mrp > price ? Math.round((1 - price / mrp) * 100) : (p.discount || null),
+              rating: p.rating ? String(p.rating.toFixed(1)) : null,
+              url: fullUrl,
+              img,
+            });
+          }
         }
       } catch (_) {}
     });
+
+    // 2. Fallback to DOM elements if JSON hydration wasn't found
+    if (results.length === 0) {
+      $('li.product-base').slice(0, 12).each((_, el) => {
+        try {
+          if (results.length >= 8) return false;
+          const item = $(el);
+          const brand = item.find('h3.product-brand').first().text().trim();
+          const desc = item.find('h4.product-product').first().text().trim();
+          const name = `${brand} ${desc}`.trim();
+          if (!name || !isRelevant(name, query)) return;
+
+          let priceEl = item.find('span.product-discountedPrice').first();
+          if (!priceEl.length) priceEl = item.find('div.product-price span').first();
+          const mrpEl = item.find('span.product-strike').first();
+          const linkEl = item.find('a[href]').first();
+          let imgEl = item.find('img.img-responsive').first();
+          if (!imgEl.length) imgEl = item.find('picture img').first();
+
+          const price = cleanPrice(priceEl.text());
+          const mrp = cleanPrice(mrpEl.text());
+          const href = linkEl.attr('href') || '';
+          const urlP = href.startsWith('http') ? href : `https://www.myntra.com/${href}`;
+          const img = imgEl.attr('src') || null;
+
+          if (price && price > 0) {
+            results.push({
+              platform: 'Myntra', name, price, mrp,
+              discount: mrp && mrp > price ? Math.round((1 - price / mrp) * 100) : null,
+              rating: null, url: urlP, img,
+            });
+          }
+        } catch (_) {}
+      });
+    }
+
     console.log(`  [Myntra] ${results.length} live results`);
   } catch (e) {
     console.warn(`  [Myntra] Live fetch failed: ${e.message}`);
@@ -559,6 +606,22 @@ const SCRAPERS = {
 };
 const ALL_PLATFORMS = Object.keys(SCRAPERS);
 
+// ── DOMAIN ROUTING HELPERS ───────────────────────────────────────────────────
+const TECH_TERMS = /\b(iphone|phone|smartphone|android|galaxy|pixel|oneplus|laptop|macbook|ipad|tablet|airpods|tv|television|headphone|earbud|processor|ram|gpu|ssd|monitor|charger)\b/i;
+const BEAUTY_TERMS = /\b(lipstick|lip gloss|eyeliner|kajal|mascara|foundation|serum|makeup|perfume|cologne|nail polish|blush|compact|skincare|moisturizer|sunscreen)\b/i;
+
+function shouldSkipPlatform(platform, query) {
+  // Nykaa specializes strictly in beauty, cosmetics and wellness
+  if (platform === 'nykaa' && TECH_TERMS.test(query)) {
+    return true;
+  }
+  // Croma specializes strictly in consumer electronics and home appliances
+  if (platform === 'croma' && BEAUTY_TERMS.test(query)) {
+    return true;
+  }
+  return false;
+}
+
 // ── ROUTES ────────────────────────────────────────────────────────────────────
 app.get('/api/search', async (req, res) => {
   const query = (req.query.q || '').trim();
@@ -566,9 +629,12 @@ app.get('/api/search', async (req, res) => {
     .split(',')
     .map(p => p.trim())
     .filter(p => SCRAPERS[p]);
-  const platforms = rawPlatforms.length ? rawPlatforms : ALL_PLATFORMS;
+  const requestedPlatforms = rawPlatforms.length ? rawPlatforms : ALL_PLATFORMS;
 
   if (!query) return res.status(400).json({ error: 'query required' });
+
+  // Filter out platforms that don't carry this catalog category
+  const platforms = requestedPlatforms.filter(p => !shouldSkipPlatform(p, query));
 
   const ck = ckey(query, [...platforms].sort().join(','));
   const cached = cacheGet(ck);
@@ -580,13 +646,13 @@ app.get('/api/search', async (req, res) => {
   console.log(`\n[Search] '${query}' → ${platforms.join(', ')}`);
   const t0 = Date.now();
   const results = {};
-  platforms.forEach(p => { results[p] = []; });
+  requestedPlatforms.forEach(p => { results[p] = []; });
 
   const settled = await Promise.allSettled(
     platforms.map(p =>
       Promise.race([
         SCRAPERS[p](query),
-        new Promise((_, reject) => setTimeout(() => reject(new Error('Timeout')), 25000)),
+        new Promise((_, reject) => setTimeout(() => reject(new Error('Timeout')), 8000)),
       ])
     )
   );
@@ -631,12 +697,12 @@ app.get('/api/compare', async (req, res) => {
   const cached = cacheGet(ck);
   if (cached) return res.json(cached);
 
-  const entries = Object.entries(SCRAPERS);
+  const entries = Object.entries(SCRAPERS).filter(([name]) => !shouldSkipPlatform(name, query));
   const settled = await Promise.allSettled(
     entries.map(([, fn]) =>
       Promise.race([
         fn(query),
-        new Promise((_, reject) => setTimeout(() => reject(new Error('Timeout')), 25000)),
+        new Promise((_, reject) => setTimeout(() => reject(new Error('Timeout')), 8000)),
       ])
     )
   );
