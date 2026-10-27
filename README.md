@@ -246,10 +246,3 @@ This project is licensed under the [MIT License](LICENSE).
 
 ---
 
-<div align="center">
-
-Built with ❤️ by [Jyotirmay Khare](https://github.com/jyotirmaykhare) · [LinkedIn](https://www.linkedin.com/in/jyotirmay-khare)
-
-🌐 [priceradar-blue.vercel.app](https://priceradar-blue.vercel.app) · ⭐ Star this repo if it helped you save money!
-
-</div>
