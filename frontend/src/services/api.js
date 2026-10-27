@@ -1,10 +1,21 @@
 /* api.js — Service for fetching real live prices */
-const API_BASE = import.meta.env.VITE_API_BASE ||
-  (typeof window !== 'undefined' && (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
-    ? '/api'
-    : 'https://priceradar-production.up.railway.app/api');
 
-// Keep Railway awake — ping on load + every 9 mins
+function getApiBase() {
+  // Read backend URL strictly from the environment variable (VITE_BACKEND_URL)
+  const envUrl = import.meta.env.VITE_BACKEND_URL || import.meta.env.VITE_API_BASE;
+
+  if (envUrl && typeof envUrl === 'string' && envUrl.trim()) {
+    const clean = envUrl.trim().replace(/\/+$/, '');
+    return clean.endsWith('/api') ? clean : `${clean}/api`;
+  }
+
+  // Fallback to relative /api if no environment variable is provided
+  return '/api';
+}
+
+const API_BASE = getApiBase();
+
+// Keep backend awake (e.g. Render spin-down prevention) — ping on load + every 9 mins
 if (typeof window !== 'undefined') {
   const ping = () => fetch(`${API_BASE}/ping`).catch(() => {});
   ping();

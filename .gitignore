@@ -6,9 +6,12 @@ package-lock.json
 dist/
 build/
 
-# Environment files
+# Environment files and secrets
 .env
-.env.local
+.env.*
+!.env.example
+*.env
+*.env.local
 
 # Logs
 *.log
