@@ -6,7 +6,6 @@
 [![Express](https://img.shields.io/badge/Express-4.x-000000?style=for-the-badge&logo=express&logoColor=white)](https://expressjs.com)
 [![React](https://img.shields.io/badge/React-19-61DAFB?style=for-the-badge&logo=react&logoColor=black)](https://react.dev)
 [![Vite](https://img.shields.io/badge/Vite-6.x-646CFF?style=for-the-badge&logo=vite&logoColor=white)](https://vitejs.dev)
-[![Railway](https://img.shields.io/badge/Backend-Railway-0B0D0E?style=for-the-badge&logo=railway&logoColor=white)](https://railway.app)
 [![Vercel](https://img.shields.io/badge/Frontend-Vercel-000000?style=for-the-badge&logo=vercel&logoColor=white)](https://vercel.com)
 [![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)](LICENSE)
 
@@ -14,7 +13,7 @@
 
 SmartPrice AI is a modern full-stack price comparison web application that tracks product prices across top Indian e-commerce stores (Amazon, Flipkart, and more) — analyzes yearly price trends, compares discounts, predicts future price drops using AI, and redirects you straight to the best deal.
 
-[🌐 Live Demo](https://priceradar-blue.vercel.app) · [Features](#-features) · [Tech Stack](#-tech-stack) · [Project Structure](#-project-structure) · [Quick Start](#-quick-start) · [Architecture](#-how-it-works) · [API Reference](#-api-reference) · [Deployment](#-deployment)
+[🌐 Live Demo](https://priceradar-reactified-kt7bs6r4n-salil25bcs10448-3366s-projects.vercel.app/) · [Features](#-features) · [Tech Stack](#-tech-stack) · [Project Structure](#-project-structure) · [Quick Start](#-quick-start) · [Architecture](#-how-it-works) · [API Reference](#-api-reference) · [Deployment](#-deployment)
 
 ---
 
