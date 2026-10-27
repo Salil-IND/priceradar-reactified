@@ -2,9 +2,10 @@
 
 **Track prices. Predict drops. Always buy at the right time.**
 
-[![Python](https://img.shields.io/badge/Python-3.x-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://python.org)
-[![Flask](https://img.shields.io/badge/Flask-2.x-000000?style=for-the-badge&logo=flask&logoColor=white)](https://flask.palletsprojects.com)
-[![JavaScript](https://img.shields.io/badge/JavaScript-ES6%2B-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)](https://developer.mozilla.org/en-US/docs/Web/JavaScript)
+[![Node.js](https://img.shields.io/badge/Node.js-20%2B-339933?style=for-the-badge&logo=nodedotjs&logoColor=white)](https://nodejs.org)
+[![Express](https://img.shields.io/badge/Express-4.x-000000?style=for-the-badge&logo=express&logoColor=white)](https://expressjs.com)
+[![React](https://img.shields.io/badge/React-19-61DAFB?style=for-the-badge&logo=react&logoColor=black)](https://react.dev)
+[![Vite](https://img.shields.io/badge/Vite-6.x-646CFF?style=for-the-badge&logo=vite&logoColor=white)](https://vitejs.dev)
 [![Railway](https://img.shields.io/badge/Backend-Railway-0B0D0E?style=for-the-badge&logo=railway&logoColor=white)](https://railway.app)
 [![Vercel](https://img.shields.io/badge/Frontend-Vercel-000000?style=for-the-badge&logo=vercel&logoColor=white)](https://vercel.com)
 [![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)](LICENSE)
@@ -12,11 +13,9 @@
 
 ### 🌐 [https://priceradar-blue.vercel.app](https://priceradar-blue.vercel.app)
 
-SmartPrice AI is a full-stack price comparison web app that tracks product prices across Amazon, Flipkart, and more — analyzes yearly price trends, compares discounts, predicts future price drops using AI, and redirects you straight to the best deal.
+SmartPrice AI is a modern full-stack price comparison web application that tracks product prices across top Indian e-commerce stores (Amazon, Flipkart, and more) — analyzes yearly price trends, compares discounts, predicts future price drops using AI, and redirects you straight to the best deal.
 
-[🌐 Live Demo](https://priceradar-blue.vercel.app) · [Features](#-features) · [Tech Stack](#-tech-stack) · [Project Structure](#-project-structure) · [Quick Start](#-quick-start) · [Deployment](#-deployment) · [How It Works](#-how-it-works)
-
-</div>
+[🌐 Live Demo](https://priceradar-blue.vercel.app) · [Features](#-features) · [Tech Stack](#-tech-stack) · [Project Structure](#-project-structure) · [Quick Start](#-quick-start) · [Architecture](#-how-it-works) · [API Reference](#-api-reference) · [Deployment](#-deployment)
 
 ---
 
@@ -24,14 +23,15 @@ SmartPrice AI is a full-stack price comparison web app that tracks product price
 
 | Feature | Description |
 |---|---|
-| 🔍 **Multi-platform Search** | Live scraping from Amazon, Flipkart, Myntra, Meesho, Croma, Nykaa, Snapdeal via ScraperAPI |
-| 📈 **Yearly Price Trend Analysis** | Visualizes 12-month historical price data per product |
-| 🤖 **AI Price Drop Prediction** | Predicts likelihood and timing of future price drops |
-| 💰 **Discount Comparison** | Compares MRP vs. current price across all platforms side-by-side |
-| 🏆 **Best Deal Recommendation** | Highlights the best value-for-money listing automatically |
-| 🔗 **Direct Redirect** | One click takes you to the lowest-price product page |
-| 🔔 **Price Alerts** | Set a target price; get notified when a product hits it |
-| 🌐 **Offline Fallback** | `api.js` serves realistic mock data automatically if the backend is unreachable |
+| 🎯 **100% Authentic Real Products** | Only real, live scraped products from verified stores are displayed — zero fabricated or synthetic mock listings. |
+| 🧠 **Intelligent Relevance Scoring** | Exact product matches rank #1 by default. Anti-accessory heuristics ensure primary devices appear above phone cases, cables, or selfie sticks. |
+| 🔍 **Multi-Platform Search** | Live scraping from Amazon, Flipkart, Myntra, Meesho, Croma, Nykaa, and Snapdeal. |
+| 📈 **Interactive Price Trend Chart** | Visualizes price trends with responsive Chart.js line graphs across 1M, 3M, and 6M ranges. |
+| 🤖 **AI Price Drop Prediction** | Forecasts short-term price variations, upcoming sale events (Diwali, Big Billion Days), and smart buy/wait advice. |
+| 💰 **Cross-Store Price Comparison** | Side-by-side price and discount breakdown with visual price difference indicators. |
+| 🏆 **Best Deal Recommendation** | Automatically highlights the lowest-priced genuine listing. |
+| 🔗 **Direct Store Redirect** | One-click button redirects directly to the lowest-price product listing page. |
+| 🔔 **Persistent Price Alerts** | Set target price alerts saved in `localStorage` across user sessions. |
 
 ---
 
@@ -40,32 +40,21 @@ SmartPrice AI is a full-stack price comparison web app that tracks product price
 ### Frontend
 | Technology | Role |
 |---|---|
-| HTML5 / CSS3 / Vanilla JavaScript (ES6+) | Core SPA — no framework, no bundler |
-| CSS Custom Properties (`variables.css`) | Design tokens — colors, spacing, typography |
-| CSS Reset (`reset.css`) | Cross-browser baseline normalization |
-| CSS Grid & Flexbox (`layout.css`) | Responsive page structure and breakpoints |
-| Component CSS (`components.css`) | Cards, buttons, modals, badges, toasts |
-| Dashboard CSS (`dashboard.css`) | Dashboard panel and widget styles |
-| Canvas API (`chart.js`) | Price history line chart — no external chart library |
-| Fetch API (`api.js`) | HTTP client with timeout, 3× retry, and automatic mock fallback if backend is down |
-| localStorage | Persistent price alerts and compare list across sessions |
+| **React 19** | Component-driven UI framework |
+| **Vite 6** | Ultra-fast build tool and local dev server with API proxy |
+| **Chart.js 4** | Interactive canvas-based price history visualization |
+| **CSS Custom Properties** | Bespoke retro-editorial design tokens, typography, and responsive layouts |
+| **Fetch API & localStorage** | Real-time REST client and persistent alert storage |
 
 ### Backend
 | Technology | Role |
 |---|---|
-| Python 3.x (`runtime.txt`) | Runtime |
-| Flask (`server.py`) | REST API server — search endpoint + scraper orchestration |
-| ScraperAPI | Proxy service for reliable, unblocked scraping across all platforms |
-| BeautifulSoup4 + lxml | HTML parsing for 7 platform scrapers |
-| Requests | HTTP client with rotating User-Agents and retry logic |
-| In-memory Cache | 60-second TTL per query to reduce API calls and rate limits |
-| Gunicorn (`Procfile`) | WSGI production server for Railway deployment |
-
-### Infrastructure & Deployment
-| Service | Role |
-|---|---|
-| [Railway](https://railway.app) | Backend hosting (`backend/railway.json` + `Procfile`) |
-| [Vercel](https://vercel.com) | Frontend hosting (`frontend/vercel.json`) |
+| **Node.js (ES Modules)** | High-throughput asynchronous non-blocking runtime |
+| **Express.js (`server.js`)** | REST API routing, CORS middleware, and request orchestration |
+| **Cheerio** | Fast HTML parsing and CSS selector extraction for web scrapers |
+| **Direct Browser Scraping** | Uses desktop browser headers and rotating User-Agents (zero mandatory proxy key) |
+| **ScraperAPI (Optional)** | Optional proxy fallback support via `.env` for large-scale anti-bot bypass |
+| **In-Memory Cache** | 90-second query caching with automated LRU-style eviction |
 
 ---
 
@@ -75,217 +64,180 @@ SmartPrice AI is a full-stack price comparison web app that tracks product price
 priceradar/
 │
 ├── backend/
-│   ├── server.py              # Flask REST API — search route + 7 platform scrapers
-│   ├── requirements.txt       # Python dependencies (flask, requests, bs4, lxml, gunicorn)
-│   ├── runtime.txt            # Python version pin for Railway
-│   ├── Procfile               # Gunicorn start command for Railway
-│   └── railway.json           # Railway deployment configuration
+│   ├── server.js              # Express REST API — parallel scrapers & relevance scoring
+│   ├── package.json           # Node dependencies (express, cheerio, cors, dotenv)
+│   ├── Procfile               # Railway web start command
+│   ├── railway.json           # Railway deployment configuration
+│   └── .env.example           # Optional environment variables template
 │
 └── frontend/
-    ├── index.html             # Single-page app entry point
-    ├── vercel.json            # Vercel routing + deployment config
-    ├── css/
-    │   ├── variables.css      # Design tokens (colors, spacing, fonts)
-    │   ├── reset.css          # Cross-browser CSS reset
-    │   ├── layout.css         # Page grid, structure, responsive breakpoints
-    │   ├── components.css     # UI components — cards, buttons, modals, badges
-    │   └── dashboard.css      # Dashboard panel styles
-    └── js/
-        ├── app.js             # Bootstrap — wires all modules on DOMContentLoaded
-        ├── api.js             # HTTP layer — fetch wrapper, timeouts, mock fallback
-        ├── tracker.js         # Core logic — search, compare, alerts, best deal
-        ├── ui.js              # DOM rendering — results, toasts, modals, progress bar
-        └── chart.js           # Price history chart using Canvas 2D API
+    ├── index.html             # Vite HTML entry point
+    ├── vite.config.js         # Vite configuration with React plugin and /api dev proxy
+    ├── package.json           # React & Vite dependencies
+    └── src/
+        ├── main.jsx           # React DOM root entry
+        ├── App.jsx            # State management, alert persistence & layout
+        ├── components/
+        │   ├── Header.jsx             # Top bar navigation & alert modal trigger
+        │   ├── HeroSearch.jsx         # Search box, platform pills, scanning progress
+        │   ├── SearchResults.jsx      # Relevance sorting, filter bar, product grid
+        │   ├── ProductCard.jsx        # Product cards with badges, prices & buy links
+        │   ├── CompareSection.jsx     # Side-by-side price comparison & best deal card
+        │   ├── PriceHistoryChart.jsx  # Chart.js price trend visualization
+        │   ├── AlertsSection.jsx      # Saved price alerts list
+        │   ├── AlertModal.jsx         # Modal to create target price alerts
+        │   ├── Toast.jsx              # Status toast notifications
+        │   └── Footer.jsx             # Site footer and disclaimer
+        ├── services/
+        │   └── api.js                 # API service layer with proxy support
+        └── styles/
+            ├── variables.css          # Design tokens (colors, fonts, radii, shadows)
+            ├── reset.css              # Cross-browser CSS baseline
+            ├── layout.css             # Grid and flexbox structure
+            ├── components.css         # Buttons, cards, pills, modal styles
+            └── dashboard.css          # Chart & comparison view styles
 ```
-
-### Key Files Explained
-
-**`backend/server.py`**
-Central Flask application. Each of the 7 platforms has its own scraper function that uses ScraperAPI for reliable proxy-based scraping. Results are normalised to `{name, price, url, image}`, cached per query for 60 seconds, and ranked before being returned. CORS is handled inline — no `flask-cors` package needed.
-
-**`frontend/js/api.js`**
-All `fetch()` calls go through here with configurable timeouts (8s health, 25s search). If the backend is unreachable, it transparently falls back to realistic mock data so the UI always works.
-
-**`frontend/js/tracker.js`**
-Orchestrates the full search flow — deduplicates results across platforms, powers side-by-side comparison, manages price alert storage in localStorage, and identifies the best deal.
-
-**`frontend/js/chart.js`**
-Renders price history as a line chart directly on a `<canvas>` element via the native Canvas 2D API — zero external dependencies.
-
-**`frontend/js/ui.js`**
-Pure DOM layer, fully decoupled from business logic. Handles rendering result cards, showing toasts, opening/closing modals, and animating the loading progress bar.
 
 ---
 
 ## 🚀 Quick Start
 
-### Backend
+### Prerequisites
+- **Node.js**: v18+ (v20+ recommended)
+- **npm**: v9+
+
+### 1. Backend Setup
 ```bash
 cd backend
-pip install -r requirements.txt
-python server.py
+npm install
+npm start
 ```
-> Runs at **http://localhost:5000**
+> The API server runs at **http://localhost:5000**
 
-### Frontend
+*(Optional)* If you have a free [ScraperAPI](https://www.scraperapi.com) key (5,000 free requests/mo), copy `.env.example` to `.env`:
+```bash
+cp .env.example .env
+# Edit .env and set SCRAPER_API_KEY=your_key
+```
+
+### 2. Frontend Setup
+In a new terminal window:
 ```bash
 cd frontend
-python -m http.server 8080
-# Open http://localhost:8080
+npm install
+npm run dev
 ```
-> Or open `frontend/index.html` directly — `api.js` automatically serves mock data if the backend is unreachable.
-
----
-
-## ☁️ Deployment
-
-This project is pre-configured for one-command deployment on both platforms.
-
-### Backend → Railway
-```bash
-# Connect repo in Railway dashboard, it auto-detects Procfile
-# Set environment variables:
-SCRAPERAPI_KEY=your_key_here
-```
-Railway uses `Procfile` to start Gunicorn and `runtime.txt` to pin the Python version.
-
-### Frontend → Vercel
-```bash
-vercel --prod
-# or connect the repo in the Vercel dashboard
-```
-`vercel.json` handles all routing rules so the SPA works correctly on refresh.
+> Vite dev server opens at **http://localhost:3000**  
+> *(The Vite dev server automatically proxies `/api` calls to `http://localhost:5000` to prevent any CORS issues during development.)*
 
 ---
 
 ## ⚙️ How It Works
 
 ```
-User searches for a product
-        │
-        ▼
-   api.js (Frontend)
-        │
-        ├──► GET /search?q=<query>  ──►  Flask (server.py)
-        │                                      │
-        │                              ScraperAPI proxy
-        │                                      │
-        │               ┌──────────────────────┼──────────────────────┐
-        │               ▼          ▼           ▼          ▼           ▼
-        │           Amazon     Flipkart     Myntra     Meesho      Croma ...
-        │               └──────────────────────┼──────────────────────┘
-        │                                      │
-        │                         Normalised + cached results
-        │                         [{name, price, url, image}]
-        │                                      │
-        │                              Ranked by best deal
-        │                                      │
-        ◄──────────────────────────────────────┘
-        │
-        ▼
-   ui.js renders result cards
-   chart.js draws price history
-   tracker.js highlights best deal
-   → Redirects user to lowest-price URL
+User searches for a product (e.g., "iPhone 15")
+         │
+         ▼
+    React 19 Frontend (Vite)
+         │
+         ├──► GET /api/search?q=iPhone+15 (Proxied via Vite dev server)
+         │           │
+         │           ▼
+         │    Express.js Backend (server.js)
+         │           │
+         │           ├─► Check 90s in-memory cache
+         │           │
+         │           └─► Promise.allSettled() across vendors:
+         │               ┌───────────────┬───────────────┬───────────────┐
+         │               ▼               ▼               ▼               ▼
+         │           Amazon          Flipkart        Snapdeal         Croma...
+         │               └───────────────┼───────────────┴───────────────┘
+         │                               │
+         │                 Cheerio DOM Parsing & Cleaning
+         │                               │
+         │                 Relevance Scoring Engine:
+         │                 - Exact query phrase matches (+50 pts)
+         │                 - Accessory demotion (-60 pts for cases/cables)
+         │                 - Realistic price boundary validation
+         │                               │
+         │                 Sorted by Best Match (Most Relevant)
+         │                               │
+         ◄───────────────────────────────┘
+         │
+         ▼
+    SearchResults Component
+    - Displays genuine live listings
+    - Filters by price, discount, or store tab
+    - One-click "Compare" triggers cross-platform comparison
 ```
-
----
-
-## 🔧 Scraper Design
-
-Every platform scraper follows the same resilient interface:
-
-```python
-def scrape_<platform>(query: str) -> list[dict]:
-    # Always returns [] on failure — never crashes the server
-    # Output: [{"name": str, "price": float, "url": str, "image": str}]
-```
-
-Resilience strategies used across all scrapers:
-- **ScraperAPI** for proxy rotation and unblocking
-- Rotating User-Agent headers on every request
-- 3× retry with exponential backoff on network errors
-- Multiple CSS selector fallbacks per platform
-- Structural scraping (URL patterns + regex) where class names are hashed
-- 60-second in-memory cache per query to reduce API usage and rate limits
-- Graceful `[]` return on any error — one broken scraper never takes down the API
 
 ---
 
 ## 📡 API Reference
 
+All routes are served under `/api` and support standard CORS headers.
+
 | Endpoint | Method | Description |
 |---|---|---|
-| `/search?q=<query>` | GET | Search all platforms, returns ranked results |
-| `/health` | GET | Backend health check |
+| `/api/search?q=<query>&platforms=<p1,p2>` | `GET` | Searches platforms in parallel, applies relevance scoring, and returns ranked real products |
+| `/api/compare?q=<query>` | `GET` | Compares a product's price across all stores, returning the best deal |
+| `/api/health` | `GET` | Returns backend health status and active platforms |
+| `/api/platforms` | `GET` | Lists all supported e-commerce platforms |
+| `/api/ping` | `GET` | Lightweight keep-alive ping for cloud containers |
 
-**Example — `GET /search?q=iphone+15`**
+#### Example Response — `GET /api/search?q=iphone`
 ```json
 {
-  "results": [
+  "query": "iphone",
+  "total": 16,
+  "elapsed": 1.94,
+  "by_platform": {
+    "amazon": [...],
+    "flipkart": [...]
+  },
+  "all": [
     {
       "platform": "Flipkart",
-      "name": "Apple iPhone 15 (128GB) - Black",
-      "price": 69999,
-      "original_price": 79900,
-      "discount": "12%",
-      "url": "https://flipkart.com/...",
-      "image": "https://..."
+      "name": "Apple iPhone 15 (Blue, 128 GB)",
+      "price": 67999,
+      "mrp": 74900,
+      "discount": 9,
+      "rating": "4.6",
+      "url": "https://www.flipkart.com/apple-iphone-15-blue-128-gb/p/itm387c20f1f5347...",
+      "img": "https://rukminim2.flixcart.com/image/312/312/xif0q/mobile/z/h/l/-original-imahqvadwhgxgx2n.jpeg?q=70"
     }
-  ],
-  "best_deal": {
-    "platform": "Flipkart",
-    "price": 69999
-  }
+  ]
 }
 ```
 
 ---
 
-## 🗺 Future Upgrades
+## ☁️ Deployment
 
-### 📊 Data & Analytics
-- [ ] **Full 1-year price history** — store and display 365 days of price data per product per platform
-- [ ] **Real-time price graph** — live-updating chart that refreshes without page reload using WebSockets or polling
-- [ ] **Price heatmap calendar** — visualize cheapest days/months to buy a product category
-- [ ] **All-time low / high indicators** — flag when a product hits its lowest recorded price
-- [ ] **Price volatility score** — show how frequently a product's price changes
+### Backend → Railway
+1. Create a new service on [Railway](https://railway.app) from this GitHub repository.
+2. Set the root directory to `/backend` (or use the root `railway.json`).
+3. Railway automatically detects `package.json` and runs `npm start` via `Procfile`.
+4. *(Optional)* Add `SCRAPER_API_KEY` to environment variables in Railway settings.
 
-### 🤖 AI & Predictions
-- [ ] **AI price drop prediction** — ML model trained on historical trends to predict drop timing and depth
-- [ ] **Seasonal sale detection** — auto-detect Diwali, Big Billion Days, End of Season patterns
-- [ ] **Smart buy score** — composite score combining price trend, discount, and rating
-- [ ] **Fake discount detector** — flag inflated MRPs used to show misleading discounts
-
-### 🔔 Alerts & Notifications
-- [ ] **Email / SMS price alerts** — notify when a tracked product hits the target price
-- [ ] **Telegram / WhatsApp bot** — send deal alerts directly to messaging apps
-- [ ] **Daily digest** — morning summary of price drops on your wishlist
-
-### 👤 User Features
-- [ ] **User accounts** — login with Google, saved wishlist and alerts across devices
-- [ ] **Product wishlist** — bulk tracking with a unified dashboard
-- [ ] **Compare history** — save and revisit past comparisons
-- [ ] **Shareable deal links** — share a price comparison snapshot via URL
-
-### 🧩 Platform & Extension
-- [ ] **Browser extension** — Chrome/Firefox extension that auto-injects price comparisons on Amazon & Flipkart product pages
-- [ ] **Mobile PWA** — installable Progressive Web App with push notifications
-- [ ] **More platforms** — Tata Cliq, JioMart, Reliance Digital, Vijay Sales
-- [ ] **International support** — expand beyond India (eBay, AliExpress, Walmart)
+### Frontend → Vercel
+1. Create a new project on [Vercel](https://vercel.com) from this repository.
+2. Set the root directory to `frontend`.
+3. Build command: `npm run build`
+4. Output directory: `dist`
+5. *(Optional)* Set `VITE_API_BASE=https://your-backend.up.railway.app/api` in Vercel environment variables.
 
 ---
 
 ## 🤝 Contributing
 
-Pull requests are welcome! For major changes, please open an issue first.
+Contributions, issues, and feature requests are welcome!
 
-```bash
-git clone https://github.com/jyotirmaykhare/priceradar.git
-cd priceradar
-pip install -r backend/requirements.txt
-# Frontend needs no install — open index.html directly
-```
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
 
 ---
 
@@ -299,6 +251,6 @@ This project is licensed under the [MIT License](LICENSE).
 
 Built with ❤️ by [Jyotirmay Khare](https://github.com/jyotirmaykhare) · [LinkedIn](https://www.linkedin.com/in/jyotirmay-khare)
 
-🌐 [priceradar-blue.vercel.app](https://priceradar-blue.vercel.app) · ⭐ Star this repo if it saved you money!
+🌐 [priceradar-blue.vercel.app](https://priceradar-blue.vercel.app) · ⭐ Star this repo if it helped you save money!
 
 </div>

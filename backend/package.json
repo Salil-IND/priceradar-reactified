@@ -1,0 +1,17 @@
+{
+  "name": "priceradar-backend",
+  "version": "7.0.0",
+  "description": "PriceRadar Node.js Express backend with parallel scraping via ScraperAPI",
+  "main": "server.js",
+  "type": "module",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js"
+  },
+  "dependencies": {
+    "cheerio": "^1.0.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2"
+  }
+}
