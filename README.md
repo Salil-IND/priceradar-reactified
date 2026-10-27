@@ -13,7 +13,7 @@
 
 SmartPrice AI is a modern full-stack price comparison web application that tracks product prices across top Indian e-commerce stores (Amazon, Flipkart, and more) — analyzes yearly price trends, compares discounts, predicts future price drops using AI, and redirects you straight to the best deal.
 
-[🌐 Live Demo](https://priceradar-reactified-kt7bs6r4n-salil25bcs10448-3366s-projects.vercel.app/) · [Features](#-features) · [Tech Stack](#-tech-stack) · [Project Structure](#-project-structure) · [Quick Start](#-quick-start) · [Architecture](#-how-it-works) · [API Reference](#-api-reference) · [Deployment](#-deployment)
+[🌐 Live Demo](https://priceradar-reactified-kt7bs6r4n-salil25bcs10448-3366s-projects.vercel.app/) · [Demo Video](https://drive.google.com/file/d/1M3H8ndIp4BKKQUTTkudNYgtPDD7IDtOk/view?usp=sharing) · [Features](#-features) · [Tech Stack](#-tech-stack) · [Project Structure](#-project-structure) · [Quick Start](#-quick-start) · [Architecture](#-how-it-works) · [API Reference](#-api-reference) · [Deployment](#-deployment)
 
 ---
 
